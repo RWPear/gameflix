@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Account</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Sign in or register</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/catalog">Catalog</a>
+      </nav>
+      <div class="nav-actions">
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Your account</div>
+          <h2>Register or log in</h2>
+        </div>
+        <div class="badge">Thymeleaf forms</div>
+      </div>
+
+      <div class="auth-grid">
+        <div class="auth-card">
+          <div class="form-head">
+            <div class="pill">Create account</div>
+            <small class="muted">POST /auth/register</small>
+          </div>
+          <div th:if="${registerError}" class="message err" th:text="${registerError}"></div>
+          <div th:if="${registerSuccess}" class="message ok" th:text="${registerSuccess}"></div>
+          <form th:action="@{/auth/register}" method="post" th:object="${registerRequest}">
+            <label>
+              Username
+              <input th:field="*{username}" required placeholder="gamertag" autocomplete="username">
+            </label>
+            <label>
+              Password
+              <input th:field="*{password}" required type="password" placeholder="********" autocomplete="new-password">
+            </label>
+            <button class="btn" type="submit">Register</button>
+          </form>
+        </div>
+
+        <div class="auth-card">
+          <div class="form-head">
+            <div class="pill">Log in</div>
+            <small class="muted">POST /auth/login</small>
+          </div>
+          <div th:if="${loginError}" class="message err" th:text="${loginError}"></div>
+          <div th:if="${loginSuccess}" class="message ok" th:text="${loginSuccess}"></div>
+          <form th:action="@{/auth/login}" method="post" th:object="${loginRequest}">
+            <label>
+              Username
+              <input th:field="*{username}" required placeholder="gamertag" autocomplete="username">
+            </label>
+            <label>
+              Password
+              <input th:field="*{password}" required type="password" placeholder="********" autocomplete="current-password">
+            </label>
+            <button class="btn ghost" type="submit">Log in</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">Auth powered by Thymeleaf forms.</footer>
+  </div>
+</body>
+</html>

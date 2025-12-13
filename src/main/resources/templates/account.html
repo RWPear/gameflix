@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Account</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/account.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Account & Library</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/catalog">Catalog</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Profile</div>
+          <h2>Your account overview</h2>
+        </div>
+        <div class="badge">Plan: <strong th:text="${planTier}">Starter</strong></div>
+      </div>
+
+      <div th:if="${planSuccess}" class="callout ok" th:text="${planSuccess}"></div>
+
+      <div class="account-hero">
+        <div class="account-summary">
+          <div class="account-meta">
+            <span class="pill ok">Signed in</span>
+            <span class="pill">User: <strong th:text="${currentUser}">Guest</strong></span>
+            <span class="pill">Plan: <strong th:text="${planTier}">Starter</strong></span>
+          </div>
+          <div class="stat-row"><span>Username</span><strong th:text="${currentUser}">Guest</strong></div>
+          <div class="stat-row"><span>Plan</span><strong th:text="${planTier}">Starter</strong></div>
+          <div class="stat-row"><span>Library</span><span class="muted">Keep favorites synced</span></div>
+          <div class="hero-actions" style="margin-top: 10px;">
+            <a class="btn" href="/logout">Sign out</a>
+            <a class="btn ghost" href="/catalog">Browse catalog</a>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Session notes</h4>
+          <p class="muted">Your plan is stored in session for this demo. Upgrading via the plan picker will update what you can access in catalog and on game detail pages.</p>
+          <div class="badge">Session-based</div>
+          <div class="badge">No billing wired yet</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Library</div>
+          <h2>Your games</h2>
+        </div>
+        <a class="btn ghost" href="/catalog">Add more games</a>
+      </div>
+      <div class="library-grid">
+        <div th:if="${#lists.isEmpty(library)}" class="empty-state">No games in your library yet. Head to the catalog to add some.</div>
+        <article class="card library-card" th:each="entry : ${library}">
+          <div class="pill" th:text="${entry.game.genre} ?: 'Uncategorized'"></div>
+          <h3 th:text="${entry.game.title}">Game</h3>
+          <div class="muted" th:text="${entry.game.subscriptionTier != null ? entry.game.subscriptionTier + ' access' : 'All plans'}"></div>
+          <div class="muted" th:text="${entry.addedAt != null ? #temporals.format(entry.addedAt, 'yyyy-MM-dd HH:mm') : ''}"></div>
+          <a class="btn ghost" th:href="@{'/game/' + ${entry.game.id}}">View</a>
+        </article>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

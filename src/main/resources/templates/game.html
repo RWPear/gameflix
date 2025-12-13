@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Game</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/game.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Game detail</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/catalog">Catalog</a>
+        <a href="/account">Account</a>
+      </nav>
+      <div class="nav-actions">
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Game detail</div>
+          <h2 th:text="${game.title}">Game</h2>
+          <div class="game-meta">
+            <span class="pill" th:text="${game.genre != null ? game.genre : 'Genre TBD'}"></span>
+            <span class="pill" th:text="${requiredTier != null ? 'Requires ' + requiredTier : 'All plans'}"></span>
+            <span class="badge" th:text="${game.ratingAvg != null ? 'Avg ' + #numbers.formatDecimal(game.ratingAvg,1,1) + '/5' : 'No reviews yet'}">No reviews yet</span>
+          </div>
+        </div>
+        <div class="badge" th:text="'Signed in as ' + ${currentUser}">Signed in as Guest</div>
+      </div>
+      <div th:if="${error}" class="callout warn" th:text="${error}"></div>
+      <div th:if="${success}" class="callout ok" th:text="${success}"></div>
+      <div class="game-hero">
+        <img th:src="${game.heroUrl ?: game.coverUrl ?: 'https://images.unsplash.com/photo-1580128637393-0ef3a570ce52?auto=format&fit=crop&w=1200&q=60'}">
+        <div>
+          <p class="muted" th:text="${game.description} ?: 'No description provided yet.'"></p>
+          <div class="action-row" style="margin-top: 8px;">
+            <a class="btn ghost" href="/catalog">Back to catalog</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Access</div>
+          <h3>Library and plan guardrails</h3>
+        </div>
+      </div>
+      <div th:if="${currentUser == 'Guest'}" class="callout warn">Sign in to add this game to your library.</div>
+      <div th:if="${currentUser != 'Guest'}">
+        <div th:if="${inLibrary}" class="callout ok">Already in your library.</div>
+        <div th:if="${!inLibrary}">
+          <div class="callout" th:if="${requiredTier != null}" th:text="'Requires ' + ${requiredTier} + ' plan. Your plan: ' + ${planTier}"></div>
+          <form th:if="${canAccess}" th:action="@{/library/add}" method="post" style="margin-top: 8px;">
+            <input type="hidden" name="gameId" th:value="${game.id}">
+            <button class="btn" type="submit">Add to my library</button>
+          </form>
+          <div class="callout warn" th:if="${!canAccess}">Upgrade your plan to access this title.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Reviews</div>
+          <h3>What players think</h3>
+        </div>
+      </div>
+      <div class="review-list">
+        <div th:if="${#lists.isEmpty(reviews)}" class="muted">No reviews yet. Be the first!</div>
+        <div class="review" th:each="r : ${reviews}">
+          <div class="review-head">
+            <span th:text="${r.username}">User</span>
+            <span class="rating" th:text="'Rating ' + ${r.rating} + '/5'"></span>
+          </div>
+          <div class="muted" th:text="${r.createdAt != null ? #temporals.format(r.createdAt, 'yyyy-MM-dd HH:mm') : ''}"></div>
+          <p th:text="${r.comment}"></p>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <h4 class="section-title">Leave a review</h4>
+        <div th:if="${currentUser == 'Guest'}" class="callout warn">Please <a href="/auth">sign in</a> to leave a review.</div>
+        <div th:if="${currentUser != 'Guest' and alreadyReviewed}" class="callout ok">You already reviewed this game. We hide the form to keep things clean.</div>
+        <form th:if="${currentUser != 'Guest' and !alreadyReviewed}" th:action="@{/reviews/form}" method="post" th:object="${reviewForm}">
+          <input type="hidden" th:field="*{gameId}">
+          <input type="hidden" th:field="*{username}" th:value="${currentUser}">
+          <label>
+            Rating
+            <select th:field="*{rating}" required>
+              <option value="5">5</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+            </select>
+          </label>
+          <label>
+            Comment
+            <textarea th:field="*{comment}" placeholder="What did you like?" required></textarea>
+          </label>
+          <button class="btn" type="submit">Submit review</button>
+        </form>
+      </div>
+    </section>
+
+    <footer class="page-footer">Reviews powered by Thymeleaf forms.</footer>
+  </div>
+</body>
+</html>

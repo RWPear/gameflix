@@ -1,0 +1,44 @@
+.account-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.account-summary {
+  background: linear-gradient(145deg, rgba(99, 245, 193, 0.1), rgba(122, 200, 255, 0.08));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.account-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.library-card {
+  display: grid;
+  gap: 8px;
+}
+
+.library-card h3 {
+  margin: 0;
+}
+
+.empty-state {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Catalog</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/catalog.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Cloud gaming catalog</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/catalog">Catalog</a>
+        <a href="/account">Account</a>
+      </nav>
+      <div class="nav-actions">
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
+        <a th:if="${currentUser == 'Guest'}" class="btn" href="/catalog">Browse games</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Explore</div>
+          <h2>Catalog</h2>
+          <div class="catalog-meta">
+            <span class="badge">Plan: <strong th:text="${planTier}">Starter</strong></span>
+            <span class="badge">Signed in as <strong th:text="${currentUser}">Guest</strong></span>
+          </div>
+        </div>
+        <div class="badge" th:text="'Showing ' + ${games.size()} + ' games'">Showing 0 games</div>
+      </div>
+
+      <div th:if="${error}" class="callout warn" th:text="${error}"></div>
+
+      <form class="catalog-header" method="get" th:action="@{/catalog}">
+        <input name="q" class="input" placeholder="Search by title or description" th:value="${searchTerm}">
+        <select name="genre" th:value="${selectedGenre}">
+          <option value="">All genres</option>
+          <option th:each="g : ${genres}" th:value="${g}" th:text="${g}"></option>
+        </select>
+        <div class="catalog-controls">
+          <button class="btn ghost" type="submit">Filter</button>
+          <a class="btn text" href="/catalog">Reset</a>
+        </div>
+      </form>
+
+      <div class="grid">
+        <div th:if="${games.isEmpty()}" class="muted">No games found.</div>
+        <article class="card game-card" th:each="g : ${games}">
+          <img th:src="${g.coverUrl} ?: 'https://images.unsplash.com/photo-1580128637393-0ef3a570ce52?auto=format&fit=crop&w=600&q=60'" th:alt="${g.title}">
+          <div class="game-top">
+            <div class="pill" th:text="${g.genre} ?: 'Uncategorized'"></div>
+            <div th:if="${g.subscriptionTier != null}"
+                 th:classappend="${g.subscriptionTier != null && #strings.equalsIgnoreCase(planTier, 'Ultimate') ? 'tag unlocked' : (g.subscriptionTier != null && #strings.equalsIgnoreCase(g.subscriptionTier, planTier) ? 'tag unlocked' : 'tag locked')}"
+                 th:text="${g.subscriptionTier + ' access'}"></div>
+          </div>
+          <h3 th:text="${g.title}"></h3>
+          <div class="muted" style="min-height:40px;" th:text="${#strings.abbreviate(g.description, 120)}"></div>
+          <div class="catalog-controls">
+            <span class="badge"
+                  th:text="${g.ratingAvg != null ? 'Rating ' + #numbers.formatDecimal(g.ratingAvg,1,1) + '/5' : 'Rating pending'}">Rating pending</span>
+            <a class="btn ghost" th:href="@{'/game/' + ${g.id}}">View</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="page-footer">Browse games powered by Thymeleaf.</footer>
+  </div>
+</body>
+</html>

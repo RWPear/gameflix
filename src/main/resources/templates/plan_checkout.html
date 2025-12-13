@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Checkout</title>
+  <link rel="stylesheet" href="/css/base.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Plan checkout (demo)</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/catalog">Catalog</a>
+        <a href="/account">Account</a>
+      </nav>
+      <div class="nav-actions">
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Demo checkout</div>
+          <h2>Confirm your plan</h2>
+        </div>
+      </div>
+      <p class="muted">This is a proof-of-concept checkout. Submitting will set your plan in the session.</p>
+      <form th:action="@{/plans/confirm}" method="post" style="display:grid;gap:12px;">
+        <label>Cardholder name (demo)
+          <input placeholder="Name on card">
+        </label>
+        <label>Card number (demo)
+          <input placeholder="0000 0000 0000 0000">
+        </label>
+        <label>Expiry (demo)
+          <input placeholder="MM/YY">
+        </label>
+        <label>CVC (demo)
+          <input placeholder="123">
+        </label>
+        <button class="btn" type="submit">Complete demo checkout</button>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

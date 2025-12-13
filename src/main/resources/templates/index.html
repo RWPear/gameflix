@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameFlix | Play instantly</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <div class="brand-badge">G</div>
+        <div>
+          <div>GameFlix</div>
+          <small class="muted" style="font-weight: 500;">Cloud gaming without the wait</small>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/catalog">Catalog</a>
+        <a href="#plans">Plans</a>
+        <a href="#how">How it works</a>
+      </nav>
+      <div class="nav-actions">
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
+        <a th:if="${currentUser == 'Guest'}" class="btn" href="/catalog">Browse catalog</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+      </div>
+    </header>
+
+    <section class="panel hero">
+      <div class="floating-blur" style="top:-60px; left:-60px;"></div>
+      <div class="floating-blur" style="bottom:-80px; right:-40px; background: radial-gradient(circle, rgba(122,200,255,0.12), transparent 60%);"></div>
+      <div class="hero-grid surface">
+        <div>
+          <div class="eyebrow">Cloud gaming, curated</div>
+          <h1 class="hero-title">Stream premium titles instantly with zero installs.</h1>
+          <p class="hero-sub">Pick a plan, sign in once, and keep your library synced across devices. We lifted patterns from reactbits-style micro interactions: soft glows, live status chips, and contextual prompts so players always know what to do next.</p>
+          <div class="pill-row">
+            <span class="pill">Latency-tuned sessions</span>
+            <span class="pill">Plan-aware catalog</span>
+            <span class="pill">Session sync</span>
+          </div>
+          <div class="hero-actions">
+            <a th:if="${currentUser == 'Guest'}" class="btn" href="/auth">Get started</a>
+            <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/catalog">Preview catalog</a>
+            <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">Continue to account</a>
+            <a th:if="${currentUser != 'Guest'}" class="btn ghost" href="/catalog">Jump into games</a>
+          </div>
+          <div class="hero-meta">
+            <span class="badge">Signed in as <strong th:text="${currentUser}">Guest</strong></span>
+            <span class="badge">Current plan: <strong th:text="${planTier}">Starter</strong></span>
+          </div>
+        </div>
+        <div class="session-card">
+          <div class="eyebrow">Session snapshot</div>
+          <h3 style="margin:0;">Live status</h3>
+          <div class="stat-pairs">
+            <div class="stat-row">
+              <span>Status</span>
+              <span th:classappend="${currentUser == 'Guest'} ? 'pill warn' : 'pill ok'" class="pill">Signed out</span>
+            </div>
+            <div class="stat-row">
+              <span>User</span>
+              <span th:text="${currentUser}">Guest</span>
+            </div>
+            <div class="stat-row">
+              <span>Plan tier</span>
+              <span th:text="${planTier}">Starter</span>
+            </div>
+            <div class="stat-row">
+              <span>Next step</span>
+              <span th:text="${currentUser == 'Guest' ? 'Create an account' : 'Browse and add to library'}">Create an account</span>
+            </div>
+          </div>
+          <div class="session-footer">
+            <a th:if="${currentUser == 'Guest'}" class="btn" href="/auth">Sign in</a>
+            <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+            <a class="btn ghost" href="/catalog">Open catalog</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="plans">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Choose your access</div>
+          <h2>Simple plans, instant upgrades</h2>
+          <p class="muted" style="max-width:560px;">Pricing cards reuse the same soft glass aesthetic you see on reactbits: glowing edges, compact spacing, and clear affordances so players know exactly which tier unlocks what.</p>
+        </div>
+      </div>
+      <div class="plan-grid">
+        <article class="plan">
+          <div class="plan-top">
+            <div class="pill">Starter</div>
+            <div class="badge">Good for casual play</div>
+          </div>
+          <div class="price"><span>$7.99</span><small>/mo</small></div>
+          <div class="features">
+            <div>- 1080p streaming</div>
+            <div>- Core library</div>
+            <div>- 2 device sign-ins</div>
+          </div>
+          <a class="btn ghost" th:href="@{'/select-plan/' + 'Starter'}">Choose Starter</a>
+        </article>
+        <article class="plan popular">
+          <div class="plan-top">
+            <div class="pill ok">Pro</div>
+            <div class="badge">Most players pick this</div>
+          </div>
+          <div class="price"><span>$12.99</span><small>/mo</small></div>
+          <div class="features">
+            <div>- 4K HDR streaming</div>
+            <div>- Full GameFlix library</div>
+            <div>- Cross-save + party cloud</div>
+          </div>
+          <a class="btn" th:href="@{'/select-plan/' + 'Pro'}">Choose Pro</a>
+        </article>
+        <article class="plan">
+          <div class="plan-top">
+            <div class="pill">Ultimate</div>
+            <div class="badge">Studio + day-one drops</div>
+          </div>
+          <div class="price"><span>$17.99</span><small>/mo</small></div>
+          <div class="features">
+            <div>- 4K HDR + 120 FPS</div>
+            <div>- Day-one releases</div>
+            <div>- 5 device sign-ins</div>
+          </div>
+          <a class="btn ghost" th:href="@{'/select-plan/' + 'Ultimate'}">Choose Ultimate</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">Feature highlights</div>
+          <h2>Guided flows with built-in micro interactions</h2>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature">
+          <strong>Plan-aware navigation</strong>
+          <p class="muted">Signed-in players only see the Account CTA; guests get clear start buttons. Chips update live so no one wonders what to do next.</p>
+          <span class="badge">Live state</span>
+        </div>
+        <div class="feature">
+          <strong>Catalog clarity</strong>
+          <p class="muted">Tier badges and locked labels mirror reactbits-style tooltips without clutter, so players know which plan unlocks each title.</p>
+          <span class="badge">Tier gates</span>
+        </div>
+        <div class="feature">
+          <strong>Review guardrails</strong>
+          <p class="muted">If you have already reviewed, the form hides and a callout appears instead. No duplicate submissions, no confusion.</p>
+          <span class="badge">Single review</span>
+        </div>
+        <div class="feature">
+          <strong>Library-first UX</strong>
+          <p class="muted">Session cards keep your plan and library guidance visible on every key page. Add to library only shows when you can actually play.</p>
+          <span class="badge">Responsive prompts</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="how">
+      <div class="panel-head">
+        <div>
+          <div class="eyebrow">How it works</div>
+          <h2>Streamlined from login to play</h2>
+        </div>
+      </div>
+      <div class="how-grid">
+        <div class="card">
+          <h4>Sign in</h4>
+          <p class="muted">Create an account, pick a plan, and your session chips update across pages.</p>
+        </div>
+        <div class="card">
+          <h4>Pick games</h4>
+          <p class="muted">Browse the catalog, see which titles are locked by tier, and add favorites to your library.</p>
+        </div>
+        <div class="card">
+          <h4>Play anywhere</h4>
+          <p class="muted">Launch in-browser with cross-save. No downloads, no patches.</p>
+        </div>
+        <div class="card">
+          <h4>Stay informed</h4>
+          <p class="muted">Inline callouts mirror reactbits popups to surface plan or access requirements before you click.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      GameFlix front-end | Styled for clarity and powered by Spring Boot static hosting.
+    </footer>
+  </div>
+</body>
+</html>
