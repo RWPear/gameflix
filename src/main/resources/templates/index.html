@@ -3,199 +3,319 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GameFlix | Play instantly</title>
+  <title>GameFlix | Stream Games Instantly</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="brand">
-        <div class="brand-badge">G</div>
-        <div>
-          <div>GameFlix</div>
-          <small class="muted" style="font-weight: 500;">Cloud gaming without the wait</small>
-        </div>
+  <div class="site-frame">
+    <nav class="nav-rail">
+      <div class="nav-left">
+        <a href="/" class="logo-mark">
+          <span class="logo-glyph">G</span>
+          <span class="logo-type">GameFlix</span>
+        </a>
       </div>
-      <nav class="nav-links">
-        <a href="/catalog">Catalog</a>
-        <a href="#plans">Plans</a>
-        <a href="#how">How it works</a>
-      </nav>
-      <div class="nav-actions">
-        <a th:if="${currentUser == 'Guest'}" class="btn ghost star-cta" href="/auth">Sign in</a>
-        <a th:if="${currentUser == 'Guest'}" class="btn star-cta" href="/catalog">Browse catalog</a>
-        <a th:if="${currentUser != 'Guest'}" class="btn star-cta" href="/account">View account</a>
+      <div class="nav-right">
+        <a th:if="${currentUser == 'Guest'}" href="/catalog" class="nav-link">Explore</a>
+        <a th:if="${currentUser != 'Guest'}" href="/catalog" class="nav-link">Catalog</a>
+        <a th:if="${currentUser != 'Guest'}" href="/account" class="nav-link">Library</a>
+        <a th:if="${currentUser == 'Guest'}" href="/auth" class="cta-chip cta-primary">Enter the stream</a>
+        <a th:if="${currentUser != 'Guest'}" href="/account" class="cta-chip cta-primary">
+          <span th:text="${currentUser}">User</span>
+        </a>
       </div>
-    </header>
+    </nav>
 
-    <section class="panel hero">
-      <div class="floating-blur" style="top:-60px; left:-60px;"></div>
-      <div class="floating-blur" style="bottom:-80px; right:-40px; background: radial-gradient(circle, rgba(122,200,255,0.12), transparent 60%);"></div>
-      <div class="hero-grid surface">
-        <div>
-          <div class="eyebrow">Cloud gaming, curated</div>
-          <h1 class="hero-title">Stream premium titles instantly with zero installs.</h1>
-          <p class="hero-sub">Pick a plan, sign in once, and keep your library synced across devices. We lifted patterns from reactbits-style micro interactions: soft glows, live status chips, and contextual prompts so players always know what to do next.</p>
-          <div class="pill-row">
-            <span class="pill">Latency-tuned sessions</span>
-            <span class="pill">Plan-aware catalog</span>
-            <span class="pill">Session sync</span>
+    <section th:if="${currentUser == 'Guest'}" class="landing-stage">
+      <div class="aurora-layer">
+        <canvas id="aurora-canvas"></canvas>
+        <div class="nebula cloud-one"></div>
+        <div class="nebula cloud-two"></div>
+        <div class="grid-wires"></div>
+      </div>
+
+      <div class="landing-stack">
+        <div class="backplate">
+          <span class="hero-badge">Cloud-native playfield</span>
+          <h1 class="hero-title">Claim your lane inside the GameFlix stream.</h1>
+          <p class="hero-subtitle">
+            Step into an always-on arena where your saves, your squads, and your gear travel with you.
+            GameFlix beams AAA worlds straight to your screens with zero installs.
+          </p>
+          <div class="cta-row">
+            <a href="/auth" class="cta-chip cta-primary">Start playing</a>
+            <a href="/catalog" class="cta-chip cta-ghost">See the worlds</a>
           </div>
-          <div class="hero-actions">
-            <a th:if="${currentUser == 'Guest'}" class="btn star-cta" href="/auth">Get started</a>
-            <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/catalog">Preview catalog</a>
-            <a th:if="${currentUser != 'Guest'}" class="btn star-cta" href="/account">Continue to account</a>
-            <a th:if="${currentUser != 'Guest'}" class="btn ghost" href="/catalog">Jump into games</a>
-          </div>
-          <div class="hero-meta">
-            <span class="badge">Signed in as <strong th:text="${currentUser}">Guest</strong></span>
-            <span class="badge">Current plan: <strong th:text="${planTier}">Starter</strong></span>
+          <div class="signal-strip">
+            <div class="signal-chip">
+              <span class="chip-label">4K beam</span>
+              <span class="chip-value">Adaptive 120fps</span>
+            </div>
+            <div class="signal-chip">
+              <span class="chip-label">Cloud identity</span>
+              <span class="chip-value">Progress everywhere</span>
+            </div>
+            <div class="signal-chip">
+              <span class="chip-label">Instant lift</span>
+              <span class="chip-value">No downloads</span>
+            </div>
           </div>
         </div>
-        <div class="session-card">
-          <div class="eyebrow">Session snapshot</div>
-          <h3 style="margin:0;">Live status</h3>
-          <div class="stat-pairs">
-            <div class="stat-row">
-              <span>Status</span>
-              <span th:classappend="${currentUser == 'Guest'} ? 'pill warn' : 'pill ok'" class="pill" th:text="${currentUser == 'Guest' ? 'Signed out' : 'Signed in'}">Signed out</span>
+
+        <div class="stream-divider">
+          <div class="stream-core"></div>
+          <div class="stream-glow"></div>
+        </div>
+
+        <div class="flow-region">
+          <div class="flow-head">
+            <span class="flow-badge">Experience rail</span>
+            <p>Everything routes through your identity—low latency, synced saves, seamless device handoff.</p>
+          </div>
+          <div class="flow-lines">
+            <div class="flow-item">
+              <span class="pulse-dot"></span>
+              <div class="flow-copy">
+                <strong>Instant launch</strong>
+                <small>Drop into play in seconds; the stream is warmed before you arrive.</small>
+              </div>
             </div>
-            <div class="stat-row">
-              <span>User</span>
-              <span th:text="${currentUser}">Guest</span>
+            <div class="flow-item">
+              <span class="pulse-dot"></span>
+              <div class="flow-copy">
+                <strong>Adaptive clarity</strong>
+                <small>4K visuals breathe with your connection so the action never judders.</small>
+              </div>
             </div>
-            <div class="stat-row">
-              <span>Plan tier</span>
-              <span th:text="${planTier}">Starter</span>
-            </div>
-            <div class="stat-row">
-              <span>Next step</span>
-              <span th:text="${currentUser == 'Guest' ? 'Create an account' : 'Browse and add to library'}">Create an account</span>
+            <div class="flow-item">
+              <span class="pulse-dot"></span>
+              <div class="flow-copy">
+                <strong>Living library</strong>
+                <small>Carry squads, achievements, and mods between every screen you touch.</small>
+              </div>
             </div>
           </div>
-          <div class="session-footer">
-            <a th:if="${currentUser == 'Guest'}" class="btn" href="/auth">Sign in</a>
-            <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
-            <a class="btn ghost" href="/catalog">Open catalog</a>
+        </div>
+
+        <section class="plan-picker" aria-label="Choose your tier">
+          <div class="plan-header">
+            <div>
+              <span class="hero-badge">Choose your beam</span>
+              <h2>Dial in the tier that fits your grind.</h2>
+              <p>Slide across the tiers and watch the perks light up—no boxes, just momentum.</p>
+            </div>
+            <div class="tier-switch" data-active="Starter">
+              <div class="tier-indicator"></div>
+              <button class="tier-tab active" data-plan="Starter">Free</button>
+              <button class="tier-tab" data-plan="Pro">
+                Pro
+                <span class="tier-popular">Most popular</span>
+              </button>
+              <button class="tier-tab" data-plan="Ultimate">Ultimate</button>
+            </div>
+          </div>
+
+          <div class="plan-panel">
+            <div class="plan-detail active" data-plan-detail="Starter">
+              <div class="plan-top">
+                <div>
+                  <h3>Free beam</h3>
+                  <p>Spin up instantly at 1080p with cloud saves and core library access.</p>
+                </div>
+                <div class="plan-price">
+                  <span class="price-tag">$0</span>
+                  <small>/month</small>
+                </div>
+              </div>
+              <div class="perk-row">
+                <span class="perk-chip">1080p streaming</span>
+                <span class="perk-chip">Core catalog</span>
+                <span class="perk-chip">2 devices</span>
+                <span class="perk-chip">Cloud saves</span>
+              </div>
+              <div class="plan-actions">
+                <a th:href="@{'/select-plan/Starter'}" class="cta-chip cta-primary">Start free</a>
+              </div>
+            </div>
+
+            <div class="plan-detail" data-plan-detail="Pro">
+              <div class="plan-top">
+                <div>
+                  <h3>Pro beam</h3>
+                  <p>4K HDR, cross-save, and priority spin-up when lobbies peak. Your sweet spot.</p>
+                </div>
+                <div class="plan-price">
+                  <span class="price-tag">$12.99</span>
+                  <small>/month</small>
+                </div>
+              </div>
+              <div class="perk-row">
+                <span class="perk-chip">4K HDR streaming</span>
+                <span class="perk-chip">Full catalog</span>
+                <span class="perk-chip">Cross-save</span>
+                <span class="perk-chip">5 devices</span>
+                <span class="perk-chip">Priority spin-up</span>
+              </div>
+              <div class="plan-actions">
+                <a th:href="@{'/select-plan/Pro'}" class="cta-chip cta-primary">Activate Pro</a>
+              </div>
+            </div>
+
+            <div class="plan-detail" data-plan-detail="Ultimate">
+              <div class="plan-top">
+                <div>
+                  <h3>Ultimate beam</h3>
+                  <p>120fps, day-one drops, unlimited devices, and top-queue latency paths.</p>
+                </div>
+                <div class="plan-price">
+                  <span class="price-tag">$17.99</span>
+                  <small>/month</small>
+                </div>
+              </div>
+              <div class="perk-row">
+                <span class="perk-chip">4K 120fps</span>
+                <span class="perk-chip">Day-one releases</span>
+                <span class="perk-chip">Unlimited devices</span>
+                <span class="perk-chip">Latency priority</span>
+                <span class="perk-chip">Premium support</span>
+              </div>
+              <div class="plan-actions">
+                <a th:href="@{'/select-plan/Ultimate'}" class="cta-chip cta-primary">Go Ultimate</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section th:if="${currentUser != 'Guest'}" class="hub-stage">
+      <div class="aurora-layer">
+        <canvas id="aurora-canvas"></canvas>
+        <div class="nebula cloud-one"></div>
+        <div class="nebula cloud-two"></div>
+        <div class="grid-wires"></div>
+      </div>
+
+      <div class="hub-body">
+        <div class="hub-intro">
+          <span class="hero-badge">GameFlix Hub</span>
+          <h1 class="hero-title">Welcome back, <span th:text="${currentUser}">User</span></h1>
+          <p class="hero-subtitle">This is your live identity space. Everything radiates from you—routes, stats, devices, and upgrades.</p>
+        </div>
+
+        <div class="hub-space">
+          <div class="identity-core">
+            <div class="core-echo"></div>
+            <div class="profile-avatar" th:text="${#strings.substring(currentUser,0,1)}">U</div>
+            <div class="profile-name" th:text="${currentUser}">User</div>
+            <div class="plan-status">
+              <span class="status-dot"></span>
+              <span th:text="${planTier + ' Plan'}">Starter Plan</span>
+              <span class="divider-dot"></span>
+              <span>Ready to play</span>
+            </div>
+            <div class="last-played">
+              Last played: <span th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span>
+            </div>
+          </div>
+
+          <div class="orbit-field">
+            <div class="orbit-rings">
+              <div class="orbit-ring large"></div>
+              <div class="orbit-ring medium"></div>
+              <div class="orbit-ring small"></div>
+              <div class="orbit-ticks"></div>
+            </div>
+
+            <div class="orbit-node stat" style="--angle:0deg; --radius:var(--stat-radius);">
+              <span class="node-label">Games owned</span>
+              <span class="node-value" th:text="${gamesOwned != null ? gamesOwned : '24'}">24</span>
+            </div>
+            <div class="orbit-node stat" style="--angle:90deg; --radius:var(--stat-radius);">
+              <span class="node-label">Devices</span>
+              <span class="node-value" th:text="${deviceCount != null ? deviceCount : '3'}">3</span>
+            </div>
+            <div class="orbit-node stat" style="--angle:180deg; --radius:var(--stat-radius);">
+              <span class="node-label">Latency</span>
+              <span class="node-value">Low</span>
+            </div>
+            <div class="orbit-node stat" style="--angle:270deg; --radius:var(--stat-radius);">
+              <span class="node-label">Last played</span>
+              <span class="node-value" th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span>
+            </div>
+
+            <a href="/catalog" class="orbit-node nav" style="--angle:45deg; --radius:var(--nav-radius);">
+              <span class="node-label">Catalog</span>
+              <span class="node-action">Launch</span>
+            </a>
+            <a href="/account" class="orbit-node nav" style="--angle:135deg; --radius:var(--nav-radius);">
+              <span class="node-label">Library</span>
+              <span class="node-action">Enter</span>
+            </a>
+            <a th:href="@{'/select-plan/' + ${planTier == 'Starter' ? 'Pro' : 'Ultimate'}}" class="orbit-node nav" style="--angle:225deg; --radius:var(--nav-radius);">
+              <span class="node-label">Upgrade</span>
+              <span class="node-action">Boost</span>
+            </a>
+            <a href="/account" class="orbit-node nav" style="--angle:315deg; --radius:var(--nav-radius);">
+              <span class="node-label">Account</span>
+              <span class="node-action">Adjust</span>
+            </a>
+
+            <div class="orbit-list">
+              <div class="orbit-chip">Games owned: <span th:text="${gamesOwned != null ? gamesOwned : '24'}">24</span></div>
+              <div class="orbit-chip">Devices: <span th:text="${deviceCount != null ? deviceCount : '3'}">3</span></div>
+              <div class="orbit-chip">Latency: Low</div>
+              <div class="orbit-chip">Last played: <span th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span></div>
+              <a href="/catalog" class="orbit-chip nav-chip">Catalog</a>
+              <a href="/account" class="orbit-chip nav-chip">Library</a>
+              <a th:href="@{'/select-plan/' + ${planTier == 'Starter' ? 'Pro' : 'Ultimate'}}" class="orbit-chip nav-chip">Upgrade</a>
+              <a href="/account" class="orbit-chip nav-chip">Account</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
-
-    <section class="panel" id="plans">
-      <div class="panel-head">
-        <div>
-          <div class="eyebrow">Choose your access</div>
-          <h2>Plans without the clutter</h2>
-          <p class="muted" style="max-width:560px;">Clean, legible cards with one clear hero option. Pick, click, and play.</p>
-        </div>
-      </div>
-      <div class="plan-grid">
-        <article class="plan">
-          <div class="plan-top">
-            <div class="pill">Starter</div>
-            <div class="badge">Good for casual play</div>
-          </div>
-          <div class="price"><span>$7.99</span><small>/mo</small></div>
-          <div class="features">
-            <div>- 1080p streaming</div>
-            <div>- Core library</div>
-            <div>- 2 device sign-ins</div>
-          </div>
-          <a class="btn ghost star-cta" th:href="@{'/select-plan/' + 'Starter'}">Choose Starter</a>
-        </article>
-        <article class="plan popular">
-          <div class="plan-top">
-            <div class="pill ok">Pro</div>
-            <div class="badge">Most used · Best balance</div>
-          </div>
-          <div class="price"><span>$12.99</span><small>/mo</small></div>
-          <div class="features">
-            <div>- 4K HDR streaming</div>
-            <div>- Full GameFlix library</div>
-            <div>- Cross-save + party cloud</div>
-          </div>
-          <a class="btn star-cta" th:href="@{'/select-plan/' + 'Pro'}">Choose Pro</a>
-        </article>
-        <article class="plan">
-          <div class="plan-top">
-            <div class="pill">Ultimate</div>
-            <div class="badge">Best for day-one drops</div>
-          </div>
-          <div class="price"><span>$17.99</span><small>/mo</small></div>
-          <div class="features">
-            <div>- 4K HDR + 120 FPS</div>
-            <div>- Day-one releases</div>
-            <div>- 5 device sign-ins</div>
-          </div>
-          <a class="btn ghost star-cta" th:href="@{'/select-plan/' + 'Ultimate'}">Choose Ultimate</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <div class="eyebrow">Feature highlights</div>
-          <h2>Guided flows with built-in micro interactions</h2>
-        </div>
-      </div>
-      <div class="feature-grid">
-        <div class="feature">
-          <strong>Plan-aware navigation</strong>
-          <p class="muted">Signed-in players only see the Account CTA; guests get clear start buttons. Chips update live so no one wonders what to do next.</p>
-          <span class="badge">Live state</span>
-        </div>
-        <div class="feature">
-          <strong>Catalog clarity</strong>
-          <p class="muted">Tier badges and locked labels mirror reactbits-style tooltips without clutter, so players know which plan unlocks each title.</p>
-          <span class="badge">Tier gates</span>
-        </div>
-        <div class="feature">
-          <strong>Review guardrails</strong>
-          <p class="muted">If you have already reviewed, the form hides and a callout appears instead. No duplicate submissions, no confusion.</p>
-          <span class="badge">Single review</span>
-        </div>
-        <div class="feature">
-          <strong>Library-first UX</strong>
-          <p class="muted">Session cards keep your plan and library guidance visible on every key page. Add to library only shows when you can actually play.</p>
-          <span class="badge">Responsive prompts</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="how">
-      <div class="panel-head">
-        <div>
-          <div class="eyebrow">How it works</div>
-          <h2>Streamlined from login to play</h2>
-        </div>
-      </div>
-      <div class="how-grid">
-        <div class="card">
-          <h4>Sign in</h4>
-          <p class="muted">Create an account, pick a plan, and your session chips update across pages.</p>
-        </div>
-        <div class="card">
-          <h4>Pick games</h4>
-          <p class="muted">Browse the catalog, see which titles are locked by tier, and add favorites to your library.</p>
-        </div>
-        <div class="card">
-          <h4>Play anywhere</h4>
-          <p class="muted">Launch in-browser with cross-save. No downloads, no patches.</p>
-        </div>
-        <div class="card">
-          <h4>Stay informed</h4>
-          <p class="muted">Inline callouts mirror reactbits popups to surface plan or access requirements before you click.</p>
-        </div>
-      </div>
-    </section>
-
-    <footer class="page-footer">
-      GameFlix front-end | Styled for clarity and powered by Spring Boot static hosting.
-    </footer>
   </div>
+
+  <script src="/js/aurora-simple.js"></script>
   <script src="/js/animations.js"></script>
+  <script>
+    if (document.getElementById('aurora-canvas')) {
+      new AuroraSimple('aurora-canvas', {
+        colors: ['#5227FF', '#63f5c1', '#7ac8ff'],
+        speed: 0.28,
+        amplitude: 1.1
+      });
+    }
+
+    if (window.GameFlixAnimations) {
+      new GameFlixAnimations.FuzzyFadeIn('.flow-item', { duration: 900, blur: true, translate: 14, threshold: 0.2 });
+      new GameFlixAnimations.FuzzyFadeIn('.plan-panel', { duration: 900, blur: true, translate: 12, threshold: 0.15 });
+      new GameFlixAnimations.FuzzyFadeIn('.orbit-node', { duration: 1000, blur: true, translate: 10, threshold: 0.1 });
+    }
+
+    // Plan picker interaction
+    const tabs = document.querySelectorAll('.tier-tab');
+    const switcher = document.querySelector('.tier-switch');
+    const planPanel = document.querySelector('.plan-panel');
+    const details = document.querySelectorAll('.plan-detail');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const plan = tab.dataset.plan;
+        tabs.forEach(t => t.classList.toggle('active', t === tab));
+        if (switcher) {
+          switcher.dataset.active = plan;
+        }
+        if (planPanel) {
+          planPanel.dataset.active = plan;
+        }
+        details.forEach(detail => {
+          const isActive = detail.dataset.planDetail === plan;
+          detail.classList.toggle('active', isActive);
+        });
+      });
+    });
+  </script>
 </body>
 </html>

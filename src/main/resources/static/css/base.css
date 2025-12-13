@@ -23,6 +23,13 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 body {
   margin: 0;
   font-family: "Space Grotesk", "Manrope", system-ui, -apple-system, sans-serif;
@@ -32,7 +39,10 @@ body {
     radial-gradient(circle at 50% 88%, rgba(99, 245, 193, 0.14), transparent 38%),
     linear-gradient(135deg, #03050c 0%, #05060e 30%, #0c1230 100%);
   color: var(--text);
-  min-height: 100vh;
+  min-height: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-attachment: fixed;
 }
 
