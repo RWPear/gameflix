@@ -4,6 +4,30 @@
   background: radial-gradient(circle at 10% 10%, rgba(99, 245, 193, 0.12), transparent 30%),
     radial-gradient(circle at 90% 0%, rgba(122, 200, 255, 0.12), transparent 34%),
     linear-gradient(145deg, #0f172a, #0b1120);
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% -30%;
+  background: conic-gradient(
+    from 45deg,
+    rgba(99, 245, 193, 0.22),
+    rgba(122, 200, 255, 0.16),
+    rgba(99, 245, 193, 0.08),
+    rgba(99, 245, 193, 0.22)
+  );
+  filter: blur(90px);
+  opacity: 1;
+  animation: auroraShift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes auroraShift {
+  0% { transform: translate3d(-5%, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(8%, -4%, 0) rotate(6deg); }
+  100% { transform: translate3d(-6%, 6%, 0) rotate(-6deg); }
 }
 
 .hero-grid {
@@ -111,7 +135,7 @@
 .plan-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 14px;
+  gap: 16px;
 }
 
 .plan {

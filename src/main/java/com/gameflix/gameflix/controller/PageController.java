@@ -10,4 +10,9 @@ public class PageController {
     public String home() {
         return "index";
     }
+
+    @GetMapping("/login")
+    public String loginRedirect() {
+        return "redirect:/auth";
+    }
 }

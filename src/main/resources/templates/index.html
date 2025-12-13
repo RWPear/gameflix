@@ -23,9 +23,9 @@
         <a href="#how">How it works</a>
       </nav>
       <div class="nav-actions">
-        <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/auth">Sign in</a>
-        <a th:if="${currentUser == 'Guest'}" class="btn" href="/catalog">Browse catalog</a>
-        <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">View account</a>
+        <a th:if="${currentUser == 'Guest'}" class="btn ghost star-cta" href="/auth">Sign in</a>
+        <a th:if="${currentUser == 'Guest'}" class="btn star-cta" href="/catalog">Browse catalog</a>
+        <a th:if="${currentUser != 'Guest'}" class="btn star-cta" href="/account">View account</a>
       </div>
     </header>
 
@@ -43,9 +43,9 @@
             <span class="pill">Session sync</span>
           </div>
           <div class="hero-actions">
-            <a th:if="${currentUser == 'Guest'}" class="btn" href="/auth">Get started</a>
+            <a th:if="${currentUser == 'Guest'}" class="btn star-cta" href="/auth">Get started</a>
             <a th:if="${currentUser == 'Guest'}" class="btn ghost" href="/catalog">Preview catalog</a>
-            <a th:if="${currentUser != 'Guest'}" class="btn" href="/account">Continue to account</a>
+            <a th:if="${currentUser != 'Guest'}" class="btn star-cta" href="/account">Continue to account</a>
             <a th:if="${currentUser != 'Guest'}" class="btn ghost" href="/catalog">Jump into games</a>
           </div>
           <div class="hero-meta">
@@ -59,7 +59,7 @@
           <div class="stat-pairs">
             <div class="stat-row">
               <span>Status</span>
-              <span th:classappend="${currentUser == 'Guest'} ? 'pill warn' : 'pill ok'" class="pill">Signed out</span>
+              <span th:classappend="${currentUser == 'Guest'} ? 'pill warn' : 'pill ok'" class="pill" th:text="${currentUser == 'Guest' ? 'Signed out' : 'Signed in'}">Signed out</span>
             </div>
             <div class="stat-row">
               <span>User</span>
@@ -87,8 +87,8 @@
       <div class="panel-head">
         <div>
           <div class="eyebrow">Choose your access</div>
-          <h2>Simple plans, instant upgrades</h2>
-          <p class="muted" style="max-width:560px;">Pricing cards reuse the same soft glass aesthetic you see on reactbits: glowing edges, compact spacing, and clear affordances so players know exactly which tier unlocks what.</p>
+          <h2>Plans without the clutter</h2>
+          <p class="muted" style="max-width:560px;">Clean, legible cards with one clear hero option. Pick, click, and play.</p>
         </div>
       </div>
       <div class="plan-grid">
@@ -103,12 +103,12 @@
             <div>- Core library</div>
             <div>- 2 device sign-ins</div>
           </div>
-          <a class="btn ghost" th:href="@{'/select-plan/' + 'Starter'}">Choose Starter</a>
+          <a class="btn ghost star-cta" th:href="@{'/select-plan/' + 'Starter'}">Choose Starter</a>
         </article>
         <article class="plan popular">
           <div class="plan-top">
             <div class="pill ok">Pro</div>
-            <div class="badge">Most players pick this</div>
+            <div class="badge">Most used · Best balance</div>
           </div>
           <div class="price"><span>$12.99</span><small>/mo</small></div>
           <div class="features">
@@ -116,12 +116,12 @@
             <div>- Full GameFlix library</div>
             <div>- Cross-save + party cloud</div>
           </div>
-          <a class="btn" th:href="@{'/select-plan/' + 'Pro'}">Choose Pro</a>
+          <a class="btn star-cta" th:href="@{'/select-plan/' + 'Pro'}">Choose Pro</a>
         </article>
         <article class="plan">
           <div class="plan-top">
             <div class="pill">Ultimate</div>
-            <div class="badge">Studio + day-one drops</div>
+            <div class="badge">Best for day-one drops</div>
           </div>
           <div class="price"><span>$17.99</span><small>/mo</small></div>
           <div class="features">
@@ -129,7 +129,7 @@
             <div>- Day-one releases</div>
             <div>- 5 device sign-ins</div>
           </div>
-          <a class="btn ghost" th:href="@{'/select-plan/' + 'Ultimate'}">Choose Ultimate</a>
+          <a class="btn ghost star-cta" th:href="@{'/select-plan/' + 'Ultimate'}">Choose Ultimate</a>
         </article>
       </div>
     </section>
@@ -196,5 +196,6 @@
       GameFlix front-end | Styled for clarity and powered by Spring Boot static hosting.
     </footer>
   </div>
+  <script src="/js/animations.js"></script>
 </body>
 </html>
