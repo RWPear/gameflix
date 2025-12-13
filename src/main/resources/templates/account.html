@@ -32,7 +32,7 @@
           <div class="eyebrow">Profile</div>
           <h2>Your account overview</h2>
         </div>
-        <div class="badge">Plan: <strong th:text="${planTier}">Starter</strong></div>
+        <div class="badge">Plan: <strong th:text="${planTier}">Free</strong></div>
       </div>
 
       <div th:if="${planSuccess}" class="callout ok" th:text="${planSuccess}"></div>
@@ -42,10 +42,10 @@
           <div class="account-meta">
             <span class="pill ok">Signed in</span>
             <span class="pill">User: <strong th:text="${currentUser}">Guest</strong></span>
-            <span class="pill">Plan: <strong th:text="${planTier}">Starter</strong></span>
+            <span class="pill">Plan: <strong th:text="${planTier}">Free</strong></span>
           </div>
           <div class="stat-row"><span>Username</span><strong th:text="${currentUser}">Guest</strong></div>
-          <div class="stat-row"><span>Plan</span><strong th:text="${planTier}">Starter</strong></div>
+          <div class="stat-row"><span>Plan</span><strong th:text="${planTier}">Free</strong></div>
           <div class="stat-row"><span>Library</span><span class="muted">Keep favorites synced</span></div>
           <div class="hero-actions" style="margin-top: 10px;">
             <a class="btn" href="/logout">Sign out</a>
@@ -74,7 +74,7 @@
         <article class="card library-card" th:each="entry : ${library}">
           <div class="pill" th:text="${entry.game.genre} ?: 'Uncategorized'"></div>
           <h3 th:text="${entry.game.title}">Game</h3>
-          <div class="muted" th:text="${entry.game.subscriptionTier != null ? entry.game.subscriptionTier + ' access' : 'All plans'}"></div>
+          <div class="muted" th:text="${entry.game.subscriptionTier != null ? (T(com.gameflix.gameflix.model.PlanTier).normalize(entry.game.subscriptionTier) != null ? T(com.gameflix.gameflix.model.PlanTier).normalize(entry.game.subscriptionTier) : entry.game.subscriptionTier) + ' access' : 'All plans'}"></div>
           <div class="muted" th:text="${entry.addedAt != null ? #temporals.format(entry.addedAt, 'yyyy-MM-dd HH:mm') : ''}"></div>
           <a class="btn ghost" th:href="@{'/game/' + ${entry.game.id}}">View</a>
         </article>

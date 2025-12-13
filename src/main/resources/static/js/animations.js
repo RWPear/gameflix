@@ -9,6 +9,7 @@ class FuzzyFadeIn {
       duration: options.duration || 1000,
       delay: options.delay || 0,
       blur: options.blur !== false,
+      preserveTransform: options.preserveTransform || false,
       threshold: options.threshold || 0.1,
       translate: options.translate ?? 12,
       ...options
@@ -29,7 +30,9 @@ class FuzzyFadeIn {
         if (this.options.blur) {
           el.style.filter = 'blur(10px)';
         }
-        el.style.transform = `translateY(${this.options.translate}px)`;
+        if (!this.options.preserveTransform) {
+          el.style.transform = `translateY(${this.options.translate}px)`;
+        }
         el.style.transition = `opacity ${this.options.duration}ms ease, filter ${this.options.duration}ms ease, transform ${this.options.duration}ms ease`;
         this.observer.observe(el);
       });
@@ -42,7 +45,9 @@ class FuzzyFadeIn {
         setTimeout(() => {
           entry.target.style.opacity = '1';
           entry.target.style.filter = 'blur(0px)';
-          entry.target.style.transform = 'translateY(0)';
+          if (!this.options.preserveTransform) {
+            entry.target.style.transform = 'translateY(0)';
+          }
         }, this.options.delay);
         this.observer.unobserve(entry.target);
       }

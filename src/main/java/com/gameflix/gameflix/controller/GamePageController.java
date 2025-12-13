@@ -2,6 +2,7 @@ package com.gameflix.gameflix.controller;
 
 import com.gameflix.gameflix.model.Game;
 import com.gameflix.gameflix.model.Review;
+import com.gameflix.gameflix.model.PlanTier;
 import com.gameflix.gameflix.service.GameService;
 import com.gameflix.gameflix.service.LibraryService;
 import com.gameflix.gameflix.service.ReviewService;
@@ -80,8 +81,11 @@ public class GamePageController {
         List<Review> reviews = reviewService.listForGame(id);
 
         String username = (String) session.getAttribute("username");
-        String planTier = (String) session.getAttribute("planTier");
-        String requiredTier = game.get().getSubscriptionTier();
+        String planTier = PlanTier.normalize((String) session.getAttribute("planTier"));
+        if (planTier == null) {
+            planTier = PlanTier.FREE;
+        }
+        String requiredTier = PlanTier.normalize(game.get().getSubscriptionTier());
         boolean canAccess = canAccess(requiredTier, planTier);
         boolean inLibrary = username != null && libraryService.exists(username, id);
         boolean alreadyReviewed = username != null && reviewService.existsForUser(id, username);
@@ -135,19 +139,7 @@ public class GamePageController {
     }
 
     private boolean canAccess(String required, String current) {
-        int req = tierWeight(required);
-        int cur = tierWeight(current);
-        return cur >= req;
-    }
-
-    private int tierWeight(String tier) {
-        if (tier == null) return 0;
-        switch (tier.toLowerCase()) {
-            case "ultimate": return 3;
-            case "pro": return 2;
-            case "starter": return 1;
-            default: return 0;
-        }
+        return PlanTier.weight(current) >= PlanTier.weight(required);
     }
 
     public static class ReviewForm {

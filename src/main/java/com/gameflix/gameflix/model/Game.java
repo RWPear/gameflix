@@ -30,7 +30,7 @@ public class Game implements Serializable {
     private Double ratingAvg;
 
     @Column(length = 20)
-    private String subscriptionTier; // Starter, Pro, Ultimate
+    private String subscriptionTier; // Free, Retro, Indie, AAA
 
     public Long getId() {
         return id;

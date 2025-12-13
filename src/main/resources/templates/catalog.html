@@ -30,16 +30,16 @@
     </header>
 
     <section class="panel">
-      <div class="panel-head">
-        <div>
-          <div class="eyebrow">Explore</div>
-          <h2>Catalog</h2>
-          <div class="catalog-meta">
-            <span class="badge">Plan: <strong th:text="${planTier}">Starter</strong></span>
-            <span class="badge">Signed in as <strong th:text="${currentUser}">Guest</strong></span>
-          </div>
-        </div>
-        <div class="badge" th:text="'Showing ' + ${games.size()} + ' games'">Showing 0 games</div>
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Explore</div>
+              <h2>Catalog</h2>
+              <div class="catalog-meta">
+                <span class="badge">Plan: <strong th:text="${planTier}">Free</strong></span>
+                <span class="badge">Signed in as <strong th:text="${currentUser}">Guest</strong></span>
+              </div>
+            </div>
+            <div class="badge" th:text="'Showing ' + ${games.size()} + ' games'">Showing 0 games</div>
       </div>
 
       <div th:if="${error}" class="callout warn" th:text="${error}"></div>
@@ -56,16 +56,16 @@
         </div>
       </form>
 
-      <div class="grid">
-        <div th:if="${games.isEmpty()}" class="muted">No games found.</div>
-        <article class="card game-card" th:each="g : ${games}">
-          <img th:src="${g.coverUrl} ?: 'https://images.unsplash.com/photo-1580128637393-0ef3a570ce52?auto=format&fit=crop&w=600&q=60'" th:alt="${g.title}">
-          <div class="game-top">
-            <div class="pill" th:text="${g.genre} ?: 'Uncategorized'"></div>
-            <div th:if="${g.subscriptionTier != null}"
-                 th:classappend="${g.subscriptionTier != null && #strings.equalsIgnoreCase(planTier, 'Ultimate') ? 'tag unlocked' : (g.subscriptionTier != null && #strings.equalsIgnoreCase(g.subscriptionTier, planTier) ? 'tag unlocked' : 'tag locked')}"
-                 th:text="${g.subscriptionTier + ' access'}"></div>
-          </div>
+          <div class="grid">
+            <div th:if="${games.isEmpty()}" class="muted">No games found.</div>
+            <article class="card game-card" th:each="g : ${games}">
+              <img th:src="${g.coverUrl} ?: 'https://images.unsplash.com/photo-1580128637393-0ef3a570ce52?auto=format&fit=crop&w=600&q=60'" th:alt="${g.title}">
+              <div class="game-top">
+                <div class="pill" th:text="${g.genre} ?: 'Uncategorized'"></div>
+                <div th:if="${g.subscriptionTier != null}"
+                 th:classappend="${T(com.gameflix.gameflix.model.PlanTier).weight(planTier) >= T(com.gameflix.gameflix.model.PlanTier).weight(g.subscriptionTier) ? 'tag unlocked' : 'tag locked'}"
+                 th:text="${(T(com.gameflix.gameflix.model.PlanTier).normalize(g.subscriptionTier) != null ? T(com.gameflix.gameflix.model.PlanTier).normalize(g.subscriptionTier) : g.subscriptionTier) + ' access'}"></div>
+              </div>
           <h3 th:text="${g.title}"></h3>
           <div class="muted" style="min-height:40px;" th:text="${#strings.abbreviate(g.description, 120)}"></div>
           <div class="catalog-controls">

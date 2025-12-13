@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GameFlix | Checkout</title>
   <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/checkout.css">
 </head>
 <body>
-  <div class="page">
+  <div class="page checkout-page">
     <header>
       <div class="brand">
         <div class="brand-badge">G</div>
@@ -27,31 +28,133 @@
       </div>
     </header>
 
-    <section class="panel">
-      <div class="panel-head">
+    <section class="panel checkout-hero">
+      <div class="checkout-hero-grid">
         <div>
           <div class="eyebrow">Demo checkout</div>
           <h2>Confirm your plan</h2>
+          <p class="muted">This is a proof-of-concept checkout. Selecting a tier here will set your session entitlement.</p>
+          <div class="badge-row">
+            <span class="pill pill-current">Current: <strong th:text="${currentTier}">Free</strong></span>
+            <span class="pill pill-selected">Selected: <strong id="selected-tier-label" th:text="${selectedDescriptor.label}">Free</strong></span>
+            <span class="pill pill-note" th:text="${isUpgrade} ? 'Upgrade path' : 'Change tier'">Upgrade path</span>
+          </div>
+        </div>
+        <div class="stacked-card">
+          <div class="stacked-title">This selection includes</div>
+          <div class="stacked-includes" id="stacked-includes">
+            <span class="include-chip" th:each="inc : ${selectedDescriptor.includes}" th:text="${inc}">Free catalog</span>
+          </div>
+          <div class="stacked-foot">
+            <small class="muted">Higher tiers stack everything beneath them.</small>
+          </div>
         </div>
       </div>
-      <p class="muted">This is a proof-of-concept checkout. Submitting will set your plan in the session.</p>
-      <form th:action="@{/plans/confirm}" method="post" style="display:grid;gap:12px;">
+    </section>
+
+    <section class="panel checkout-grid">
+      <div class="tier-column">
+        <div class="eyebrow">Select a tier</div>
+        <h3>Choose your library unlock</h3>
+        <div class="tier-grid">
+          <button type="button" class="tier-card"
+                  th:each="tier : ${tiers}"
+                  th:data-tier="${tier.key}"
+                  th:data-label="${tier.label}"
+                  th:data-includes="${#strings.arrayJoin(#arrays.toStringArray(tier.includes), '|')}"
+                  th:classappend="${tier.key == selectedTier} ? ' active' : ''">
+            <div class="tier-card-head">
+              <div class="tier-label">
+                <span class="tier-name" th:text="${tier.label}">Retro Pack</span>
+                <span class="pill pill-current" th:if="${tier.key == currentTier}">Current</span>
+                <span class="pill pill-selected" th:if="${tier.key == selectedTier}">Selected</span>
+              </div>
+              <div class="tier-price" th:text="${tier.price}">$0</div>
+            </div>
+            <p class="tier-description" th:text="${tier.description}">Description</p>
+            <div class="include-stack">
+              <span class="include-chip" th:each="inc : ${tier.includes}" th:text="${inc}">Includes</span>
+            </div>
+            <div class="perk-list">
+              <span class="perk-chip" th:each="perk : ${tier.perks}" th:text="${perk}">Perk</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <form class="checkout-form" th:action="@{/plans/confirm}" method="post">
+        <div class="eyebrow">Demo card</div>
+        <h3>Finish checkout</h3>
+        <p class="muted">No real charges. Submitting will set your plan in the session.</p>
+        <input type="hidden" name="tier" id="selected-tier-input" th:value="${selectedTier}">
         <label>Cardholder name (demo)
-          <input placeholder="Name on card">
+          <input name="cardholder" placeholder="Name on card">
         </label>
         <label>Card number (demo)
-          <input placeholder="0000 0000 0000 0000">
+          <input name="card" placeholder="0000 0000 0000 0000">
         </label>
         <label>Expiry (demo)
-          <input placeholder="MM/YY">
+          <input name="expiry" placeholder="MM/YY">
         </label>
         <label>CVC (demo)
-          <input placeholder="123">
+          <input name="cvc" placeholder="123">
         </label>
+        <div class="selection-summary">
+          <div class="pill pill-selected">Selected: <span id="form-selected-label" th:text="${selectedDescriptor.label}">Free</span></div>
+          <div class="stacked-includes" id="form-includes">
+            <span class="include-chip" th:each="inc : ${selectedDescriptor.includes}" th:text="${inc}">Free catalog</span>
+          </div>
+        </div>
         <button class="btn" type="submit">Complete demo checkout</button>
       </form>
     </section>
   </div>
   <script src="/js/animations.js"></script>
+  <script>
+    (function() {
+      const cards = document.querySelectorAll('.tier-card');
+      const hidden = document.getElementById('selected-tier-input');
+      const labelTarget = document.getElementById('selected-tier-label');
+      const formLabel = document.getElementById('form-selected-label');
+      const includeTargets = [
+        document.getElementById('stacked-includes'),
+        document.getElementById('form-includes')
+      ];
+
+      const updateIncludes = (includes) => {
+        includeTargets.forEach(container => {
+          if (!container) return;
+          container.innerHTML = '';
+          includes.forEach(text => {
+            const chip = document.createElement('span');
+            chip.className = 'include-chip';
+            chip.textContent = text;
+            container.appendChild(chip);
+          });
+        });
+      };
+
+      const setSelection = (card) => {
+        if (!card) return;
+        const tier = card.dataset.tier;
+        const label = card.dataset.label || tier;
+        const includes = (card.dataset.includes || '').split('|').filter(Boolean);
+
+        hidden.value = tier;
+        if (labelTarget) labelTarget.textContent = label;
+        if (formLabel) formLabel.textContent = label;
+
+        cards.forEach(c => c.classList.toggle('active', c === card));
+        updateIncludes(includes);
+      };
+
+      cards.forEach(card => {
+        card.addEventListener('click', () => setSelection(card));
+      });
+
+      const activeCard = document.querySelector('.tier-card.active') || cards[0];
+      setSelection(activeCard);
+    })();
+  </script>
 </body>
 </html>

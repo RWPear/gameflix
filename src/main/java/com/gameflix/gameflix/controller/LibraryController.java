@@ -1,6 +1,7 @@
 package com.gameflix.gameflix.controller;
 
 import com.gameflix.gameflix.model.Game;
+import com.gameflix.gameflix.model.PlanTier;
 import com.gameflix.gameflix.service.GameService;
 import com.gameflix.gameflix.service.LibraryService;
 import jakarta.servlet.http.HttpSession;
@@ -38,8 +39,11 @@ public class LibraryController {
         }
 
         // Check subscription tier
-        String requiredTier = g.get().getSubscriptionTier();
-        String currentTier = (String) session.getAttribute("planTier");
+        String requiredTier = PlanTier.normalize(g.get().getSubscriptionTier());
+        String currentTier = PlanTier.normalize((String) session.getAttribute("planTier"));
+        if (currentTier == null) {
+            currentTier = PlanTier.FREE;
+        }
         if (requiredTier != null && currentTier != null && !canAccess(requiredTier, currentTier)) {
             redirectAttributes.addAttribute("error", "This game requires " + requiredTier + " or higher.");
             return "redirect:/game/" + gameId;
@@ -51,18 +55,6 @@ public class LibraryController {
     }
 
     private boolean canAccess(String required, String current) {
-        int req = tierWeight(required);
-        int cur = tierWeight(current);
-        return cur >= req;
-    }
-
-    private int tierWeight(String tier) {
-        if (tier == null) return 0;
-        switch (tier.toLowerCase()) {
-            case "ultimate": return 3;
-            case "pro": return 2;
-            case "starter": return 1;
-            default: return 0;
-        }
+        return PlanTier.weight(current) >= PlanTier.weight(required);
     }
 }

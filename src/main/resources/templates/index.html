@@ -103,25 +103,34 @@
             <div>
               <span class="hero-badge">Choose your beam</span>
               <h2>Dial in the tier that fits your grind.</h2>
-              <p>Slide across the tiers and watch the perks light up—no boxes, just momentum.</p>
+              <p>Slide across the tiers and watch the perks light up--no boxes, just momentum.</p>
             </div>
-            <div class="tier-switch" data-active="Starter">
+            <div class="tier-switch" th:attr="data-active=${planTier}" data-active="Free" style="--tabs:4;">
               <div class="tier-indicator"></div>
-              <button class="tier-tab active" data-plan="Starter">Free</button>
-              <button class="tier-tab" data-plan="Pro">
-                Pro
+              <button class="tier-tab" data-plan="Free" data-label="Free" data-index="0"
+                      th:classappend="${planTier == 'Free'} ? ' active' : ''">Free</button>
+              <button class="tier-tab" data-plan="Retro" data-label="Retro Pack" data-index="1"
+                      th:classappend="${planTier == 'Retro'} ? ' active' : ''">Retro Pack</button>
+              <button class="tier-tab" data-plan="Indie" data-label="Indie Pack" data-index="2"
+                      th:classappend="${planTier == 'Indie'} ? ' active' : ''">
+                Indie Pack
                 <span class="tier-popular">Most popular</span>
               </button>
-              <button class="tier-tab" data-plan="Ultimate">Ultimate</button>
+              <button class="tier-tab" data-plan="AAA" data-label="AAA Pack" data-index="3"
+                      th:classappend="${planTier == 'AAA'} ? ' active' : ''">AAA Pack</button>
             </div>
           </div>
 
-          <div class="plan-panel">
-            <div class="plan-detail active" data-plan-detail="Starter">
+          <div class="plan-panel"
+               th:attr="data-active=${planTier}, data-label=${planTier == 'Retro' ? 'Retro Pack' : (planTier == 'Indie' ? 'Indie Pack' : (planTier == 'AAA' ? 'AAA Pack' : 'Free'))}"
+               data-active="Free"
+               data-label="Free">
+            <div class="plan-detail" data-plan-detail="Free"
+                 th:classappend="${planTier == 'Free'} ? ' active' : ''">
               <div class="plan-top">
                 <div>
-                  <h3>Free beam</h3>
-                  <p>Spin up instantly at 1080p with cloud saves and core library access.</p>
+                  <h3>Free</h3>
+                  <p>Spin up instantly at 1080p with cloud saves and the free library.</p>
                 </div>
                 <div class="plan-price">
                   <span class="price-tag">$0</span>
@@ -130,20 +139,46 @@
               </div>
               <div class="perk-row">
                 <span class="perk-chip">1080p streaming</span>
-                <span class="perk-chip">Core catalog</span>
-                <span class="perk-chip">2 devices</span>
+                <span class="perk-chip">Free-to-play catalog</span>
                 <span class="perk-chip">Cloud saves</span>
+                <span class="perk-chip">2 devices</span>
               </div>
               <div class="plan-actions">
-                <a th:href="@{'/select-plan/Starter'}" class="cta-chip cta-primary">Start free</a>
+                <a th:href="@{'/plans/checkout'(tier='Free')}" class="cta-chip cta-primary plan-cta" data-plan="Free">Checkout with Free</a>
+                <span class="plan-note">Includes the free catalog</span>
               </div>
             </div>
 
-            <div class="plan-detail" data-plan-detail="Pro">
+            <div class="plan-detail" data-plan-detail="Retro"
+                 th:classappend="${planTier == 'Retro'} ? ' active' : ''">
               <div class="plan-top">
                 <div>
-                  <h3>Pro beam</h3>
-                  <p>4K HDR, cross-save, and priority spin-up when lobbies peak. Your sweet spot.</p>
+                  <h3>Retro Pack</h3>
+                  <p>Unlock the full retro vault. Includes everything in Free.</p>
+                </div>
+                <div class="plan-price">
+                  <span class="price-tag">$5.99</span>
+                  <small>/month</small>
+                </div>
+              </div>
+              <div class="perk-row">
+                <span class="perk-chip">Upscaled classics</span>
+                <span class="perk-chip">Retro achievements</span>
+                <span class="perk-chip">CRT-style shaders</span>
+                <span class="perk-chip">Early event access</span>
+              </div>
+              <div class="plan-actions">
+                <a th:href="@{'/plans/checkout'(tier='Retro')}" class="cta-chip cta-primary plan-cta" data-plan="Retro">Select Retro Pack</a>
+                <span class="plan-note">Includes Free</span>
+              </div>
+            </div>
+
+            <div class="plan-detail" data-plan-detail="Indie"
+                 th:classappend="${planTier == 'Indie'} ? ' active' : ''">
+              <div class="plan-top">
+                <div>
+                  <h3>Indie Pack</h3>
+                  <p>Indie darlings plus every retro and free game. Perfect middle lane.</p>
                 </div>
                 <div class="plan-price">
                   <span class="price-tag">$12.99</span>
@@ -151,22 +186,23 @@
                 </div>
               </div>
               <div class="perk-row">
-                <span class="perk-chip">4K HDR streaming</span>
-                <span class="perk-chip">Full catalog</span>
-                <span class="perk-chip">Cross-save</span>
+                <span class="perk-chip">4K streaming on indies</span>
+                <span class="perk-chip">Cross-save sync</span>
                 <span class="perk-chip">5 devices</span>
-                <span class="perk-chip">Priority spin-up</span>
+                <span class="perk-chip">Queue priority</span>
               </div>
               <div class="plan-actions">
-                <a th:href="@{'/select-plan/Pro'}" class="cta-chip cta-primary">Activate Pro</a>
+                <a th:href="@{'/plans/checkout'(tier='Indie')}" class="cta-chip cta-primary plan-cta" data-plan="Indie">Select Indie Pack</a>
+                <span class="plan-note">Includes Retro Pack + Free</span>
               </div>
             </div>
 
-            <div class="plan-detail" data-plan-detail="Ultimate">
+            <div class="plan-detail" data-plan-detail="AAA"
+                 th:classappend="${planTier == 'AAA'} ? ' active' : ''">
               <div class="plan-top">
                 <div>
-                  <h3>Ultimate beam</h3>
-                  <p>120fps, day-one drops, unlimited devices, and top-queue latency paths.</p>
+                  <h3>AAA Pack</h3>
+                  <p>Day-one AAA drops with the entire library beneath it.</p>
                 </div>
                 <div class="plan-price">
                   <span class="price-tag">$17.99</span>
@@ -174,18 +210,21 @@
                 </div>
               </div>
               <div class="perk-row">
-                <span class="perk-chip">4K 120fps</span>
-                <span class="perk-chip">Day-one releases</span>
+                <span class="perk-chip">120fps where available</span>
                 <span class="perk-chip">Unlimited devices</span>
                 <span class="perk-chip">Latency priority</span>
                 <span class="perk-chip">Premium support</span>
               </div>
               <div class="plan-actions">
-                <a th:href="@{'/select-plan/Ultimate'}" class="cta-chip cta-primary">Go Ultimate</a>
+                <a th:href="@{'/plans/checkout'(tier='AAA')}" class="cta-chip cta-primary plan-cta" data-plan="AAA">Select AAA Pack</a>
+                <span class="plan-note">Includes Indie Pack + Retro + Free</span>
               </div>
             </div>
           </div>
         </section>
+
+
+
       </div>
     </section>
 
@@ -204,23 +243,23 @@
           <p class="hero-subtitle">This is your live identity space. Everything radiates from you—routes, stats, devices, and upgrades.</p>
         </div>
 
-        <div class="hub-space">
-          <div class="identity-core">
-            <div class="core-echo"></div>
-            <div class="profile-avatar" th:text="${#strings.substring(currentUser,0,1)}">U</div>
-            <div class="profile-name" th:text="${currentUser}">User</div>
-            <div class="plan-status">
-              <span class="status-dot"></span>
-              <span th:text="${planTier + ' Plan'}">Starter Plan</span>
-              <span class="divider-dot"></span>
-              <span>Ready to play</span>
-            </div>
-            <div class="last-played">
-              Last played: <span th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span>
-            </div>
-          </div>
-
+        <div class="hub-space" th:with="nextTier=${planTier == 'Free' ? 'Retro' : (planTier == 'Retro' ? 'Indie' : (planTier == 'Indie' ? 'AAA' : 'AAA'))}">
           <div class="orbit-field">
+            <div class="identity-core">
+              <div class="core-echo"></div>
+              <div class="profile-avatar" th:text="${#strings.substring(currentUser,0,1)}">U</div>
+              <div class="profile-name" th:text="${currentUser}">User</div>
+              <div class="plan-status">
+                <span class="status-dot"></span>
+                <span th:text="${planTier + ' tier'}">Free tier</span>
+                <span class="divider-dot"></span>
+                <span>Ready to play</span>
+              </div>
+              <div class="last-played">
+                Last played: <span th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span>
+              </div>
+            </div>
+
             <div class="orbit-rings">
               <div class="orbit-ring large"></div>
               <div class="orbit-ring medium"></div>
@@ -228,36 +267,36 @@
               <div class="orbit-ticks"></div>
             </div>
 
-            <div class="orbit-node stat" style="--angle:0deg; --radius:var(--stat-radius);">
+            <div class="orbit-node stat">
               <span class="node-label">Games owned</span>
               <span class="node-value" th:text="${gamesOwned != null ? gamesOwned : '24'}">24</span>
             </div>
-            <div class="orbit-node stat" style="--angle:90deg; --radius:var(--stat-radius);">
+            <div class="orbit-node stat">
               <span class="node-label">Devices</span>
               <span class="node-value" th:text="${deviceCount != null ? deviceCount : '3'}">3</span>
             </div>
-            <div class="orbit-node stat" style="--angle:180deg; --radius:var(--stat-radius);">
+            <div class="orbit-node stat">
               <span class="node-label">Latency</span>
               <span class="node-value">Low</span>
             </div>
-            <div class="orbit-node stat" style="--angle:270deg; --radius:var(--stat-radius);">
+            <div class="orbit-node stat">
               <span class="node-label">Last played</span>
               <span class="node-value" th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span>
             </div>
 
-            <a href="/catalog" class="orbit-node nav" style="--angle:45deg; --radius:var(--nav-radius);">
+            <a href="/catalog" class="orbit-node nav">
               <span class="node-label">Catalog</span>
               <span class="node-action">Launch</span>
             </a>
-            <a href="/account" class="orbit-node nav" style="--angle:135deg; --radius:var(--nav-radius);">
+            <a href="/account" class="orbit-node nav">
               <span class="node-label">Library</span>
               <span class="node-action">Enter</span>
             </a>
-            <a th:href="@{'/select-plan/' + ${planTier == 'Starter' ? 'Pro' : 'Ultimate'}}" class="orbit-node nav" style="--angle:225deg; --radius:var(--nav-radius);">
+            <a th:href="@{'/plans/checkout'(tier=${nextTier})}" class="orbit-node nav">
               <span class="node-label">Upgrade</span>
               <span class="node-action">Boost</span>
             </a>
-            <a href="/account" class="orbit-node nav" style="--angle:315deg; --radius:var(--nav-radius);">
+            <a href="/account" class="orbit-node nav">
               <span class="node-label">Account</span>
               <span class="node-action">Adjust</span>
             </a>
@@ -269,7 +308,7 @@
               <div class="orbit-chip">Last played: <span th:text="${lastPlayed != null ? lastPlayed : 'Tonight'}">Tonight</span></div>
               <a href="/catalog" class="orbit-chip nav-chip">Catalog</a>
               <a href="/account" class="orbit-chip nav-chip">Library</a>
-              <a th:href="@{'/select-plan/' + ${planTier == 'Starter' ? 'Pro' : 'Ultimate'}}" class="orbit-chip nav-chip">Upgrade</a>
+              <a th:href="@{'/plans/checkout'(tier=${nextTier})}" class="orbit-chip nav-chip">Upgrade</a>
               <a href="/account" class="orbit-chip nav-chip">Account</a>
             </div>
           </div>
@@ -291,8 +330,8 @@
 
     if (window.GameFlixAnimations) {
       new GameFlixAnimations.FuzzyFadeIn('.flow-item', { duration: 900, blur: true, translate: 14, threshold: 0.2 });
-      new GameFlixAnimations.FuzzyFadeIn('.plan-panel', { duration: 900, blur: true, translate: 12, threshold: 0.15 });
-      new GameFlixAnimations.FuzzyFadeIn('.orbit-node', { duration: 1000, blur: true, translate: 10, threshold: 0.1 });
+      new GameFlixAnimations.FuzzyFadeIn('.plan-panel', { duration: 900, blur: true, translate: 0, threshold: 0.15, preserveTransform: true });
+      new GameFlixAnimations.FuzzyFadeIn('.orbit-node', { duration: 900, blur: true, translate: 0, threshold: 0.1, preserveTransform: true });
     }
 
     // Plan picker interaction
@@ -300,22 +339,77 @@
     const switcher = document.querySelector('.tier-switch');
     const planPanel = document.querySelector('.plan-panel');
     const details = document.querySelectorAll('.plan-detail');
+
+    if (switcher) {
+      switcher.style.setProperty('--tabs', tabs.length);
+    }
+
+    const setPlan = (plan, label) => {
+      let index = 0;
+      tabs.forEach((tab, idx) => {
+        const isActive = tab.dataset.plan === plan;
+        if (isActive) {
+          index = tab.dataset.index || idx;
+          label = label || tab.dataset.label || tab.textContent.trim();
+        }
+        tab.classList.toggle('active', isActive);
+      });
+
+      if (switcher) {
+        switcher.dataset.active = plan;
+        switcher.style.setProperty('--active-index', index);
+      }
+
+      if (planPanel) {
+        planPanel.dataset.active = plan;
+        if (label) {
+          planPanel.dataset.label = label;
+        }
+      }
+
+      details.forEach(detail => {
+        const isActive = detail.dataset.planDetail === plan;
+        detail.classList.toggle('active', isActive);
+      });
+    };
+
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const plan = tab.dataset.plan;
-        tabs.forEach(t => t.classList.toggle('active', t === tab));
-        if (switcher) {
-          switcher.dataset.active = plan;
+      tab.addEventListener('click', () => setPlan(tab.dataset.plan, tab.dataset.label));
+    });
+
+    details.forEach(detail => {
+      detail.addEventListener('click', (evt) => {
+        const plan = detail.dataset.planDetail;
+        if (evt.target.closest('a')) return;
+        setPlan(plan, detail.querySelector('h3')?.textContent);
+        const cta = detail.querySelector('.plan-cta');
+        if (cta && cta.getAttribute('href')) {
+          window.location.href = cta.getAttribute('href');
         }
-        if (planPanel) {
-          planPanel.dataset.active = plan;
-        }
-        details.forEach(detail => {
-          const isActive = detail.dataset.planDetail === plan;
-          detail.classList.toggle('active', isActive);
-        });
       });
     });
+
+    const startingPlan = planPanel?.dataset.active || switcher?.dataset.active || tabs[0]?.dataset.plan;
+    if (startingPlan) {
+      setPlan(startingPlan, planPanel?.dataset.label);
+    }
+
+    // Hub orbit positioning (polar layout)
+    const orbitField = document.querySelector('.orbit-field');
+    if (orbitField) {
+      const placeNodes = (nodes, radiusVar, offsetDeg = 0) => {
+        const total = nodes.length;
+        if (!total) return;
+        nodes.forEach((node, index) => {
+          const angle = offsetDeg + (360 / total) * index;
+          node.style.setProperty('--angle', `${angle}deg`);
+          node.style.setProperty('--radius', radiusVar);
+        });
+      };
+
+      placeNodes(orbitField.querySelectorAll('.orbit-node.stat'), 'var(--stat-radius)', -90);
+      placeNodes(orbitField.querySelectorAll('.orbit-node.nav'), 'var(--nav-radius)', -45);
+    }
   </script>
 </body>
 </html>
